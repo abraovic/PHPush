@@ -13,8 +13,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/abraovic/PHPush/issues",
-        "source": "https://github.com/abraovic/PHPush"
+        "issues": "https://github.com/abraovic/phpush/issues",
+        "source": "https://github.com/abraovic/phpush"
     },
     "require": {
         "php": ">=5.3",

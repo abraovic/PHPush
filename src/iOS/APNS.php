@@ -125,21 +125,21 @@ class APNS implements PHPush\Push
             );
         }
 
-        // bulid message
-        $msg =  pack("C", 1);
-        if (isset($this->identifier)) {
+        /// bulid message
+        $msg =  chr(0) . pack('n', 32) . pack('H*', $this->deviceToken) . pack('n', strlen($payload)) . $payload;
+        if(isset($this->identifier)){
             $msg .= pack("N", $this->identifier);
-        } else {
+        }else{
             $msg .= pack("C", 1).pack("C", 1).pack("C", 1).pack("C", 1);
         }
-        if (isset($this->expiry)) {
+        if(isset($this->expiry)){
             $msg .= pack("N", $this->expiry);
+        }else{
+            $msg .= pack("N", time()+(90 * 24 * 60 * 60));  // 90 days default
         }
-        if (isset($this->priority)) {
+        if(isset($this->priority)){
             $msg .= pack("N", $this->priority);
         }
-
-        $msg .= pack('n', 32) . pack('H*', $this->deviceToken) . pack('n', strlen($payload)) . $payload;
         $result = fwrite($fp, $msg, strlen($msg));
         $this->checkAppleErrorResponse($fp);
         fclose($fp);

@@ -160,8 +160,9 @@ class APNS implements PHPush\Push
      * @return bool
      * @throws PHPushException
      */
-    private function checkAppleErrorResponse($fp) {
-
+    private function checkAppleErrorResponse($fp)
+    {
+        stream_set_blocking($fp, 0);
         $apple_error_response = fread($fp, 6);
 
         if ($apple_error_response) {

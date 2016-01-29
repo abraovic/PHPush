@@ -1,0 +1,17 @@
+# THIS FILE SHOULD NOT BE EDITED
+ios:
+    socket_url:
+        production: ssl://gateway.push.apple.com:2195
+        development: ssl://gateway.sandbox.push.apple.com:2195
+    credentials:
+        - device_token
+        - certificate_path
+        - certificate_phrase
+        - dev
+android:
+    socket_url:
+        production: https://android.googleapis.com/gcm/send
+        developemnt: %production%
+    credentials:
+        - device_token
+        - google_api_key

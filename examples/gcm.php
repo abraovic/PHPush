@@ -7,19 +7,16 @@ use abraovic\PHPush\Exception\PHPushException;
 
 try {
 
-    $type = PHPush\Push\Push::IOS;
+    $type = PHPush\Push\Push::ANDROID;
     $credentials = [
         'device_token' => 'fake-token',
-        'certificate_path' => 'fake-cert',
-        'certificate_phrase' => '',
-        'dev' => true
+        'google_api_key' => 'fake-api'
     ];
 
     $push = new PHPush\Push\Push($type, $credentials);
     $message = new PHPush\Push\Message($type, "Hello");
     $message->setBadge(200);
-    $iosMsg = $message->getMessage();
-    $iosMsg->setSound('default');
+    $message->setAdditional(["key" => "value"]);
 
     if ($push->sendMessage($message)) {
         echo "sent";

@@ -23,22 +23,24 @@ try {
 
     $type = PHPush\Push\Push::IOS;
     $credentials = [
-        'device_token' => 'paste-token-here',
-        'certificate_path' => 'exported-cert.pem', // make sure it is pem
-        'certificate_phrase' => 'pass-if-needed',
-        'dev' => true // make sure this meets certificate
+        'device_token' => 'fake-token',
+        'certificate_path' => 'fake-cert',
+        'certificate_phrase' => '',
+        'dev' => true
     ];
-    
+
     $push = new PHPush\Push\Push($type, $credentials);
-    $message = new PHPush\iOS\Message();
-    $message->setAlert("This will be shown");
-    $message->setBadge(2);
-    $push->sendMessage($message);
+    $message = new PHPush\Push\Message($type, "Hello");
+    $message->setBadge(200);
+    $message->setBody('bodi');
+    $iosMsg = $message->getMessage();
+    $iosMsg->setSound('default');
 
+    if ($push->sendMessage($message)) {
+        echo "sent";
+    }
 } catch (PHPushException $e) {
-
     echo 'Caught exception: ' . $e->getMessage() . "\n";
-
 }
 ```
 

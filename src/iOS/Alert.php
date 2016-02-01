@@ -28,15 +28,15 @@ class Alert
     private $launchImage;
 
     /**
-     * @param string $title
+     * @param string $body
      */
     function __construct($body)
     {
-        $this->title = $body;
+        $this->body = $body;
     }
 
     /**
-     * @param string $body
+     * @param string $title
      * @return $this
      */
     public function setTitle($title)
@@ -107,10 +107,10 @@ class Alert
 
     public function toArray()
     {
-        $array = ['title' => $this->title];
+        $array = ['body' => $this->body];
 
-        if ($this->body) {
-            $array['body'] = $this->body;
+        if ($this->title) {
+            $array['title'] = $this->title;
         }
         if ($this->titleLocKey) {
             $array['title-loc-key'] = $this->titleLocKey;

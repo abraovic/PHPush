@@ -52,6 +52,8 @@ class Message implements PHPush\Message
     public function setBadge($badge)
     {
         $this->data['badge'] = $badge;
+        $this->notification->setBadge($badge);
+        return $this;
     }
 
     public function setAdditional($data)
@@ -96,6 +98,86 @@ class Message implements PHPush\Message
     public function setIcon($icon)
     {
         $this->notification->setIcon($icon);
+        return $this;
+    }
+
+    /**
+     * @param array $bodyLocArgs
+     * @return $this
+     */
+    public function setBodyLocArgs($bodyLocArgs)
+    {
+        $this->notification->setBodyLocArgs($bodyLocArgs);
+        return $this;
+    }
+
+    /**
+     * @param string $bodyLocKey
+     * @return $this
+     */
+    public function setBodyLocKey($bodyLocKey)
+    {
+        $this->notification->setBodyLocKey($bodyLocKey);
+        return $this;
+    }
+
+    /**
+     * @param string $clickAction
+     * @return $this
+     */
+    public function setClickAction($clickAction)
+    {
+        $this->notification->setClickAction($clickAction);
+        return $this;
+    }
+
+    /**
+     * @param string $color
+     * @return $this
+     */
+    public function setColor($color)
+    {
+        $this->notification->setColor($color);
+        return $this;
+    }
+
+    /**
+     * @param string $sound
+     * @return $this
+     */
+    public function setSound($sound)
+    {
+        $this->notification->setSound($sound);
+        return $this;
+    }
+
+    /**
+     * @param string $tag
+     * @return $this
+     */
+    public function setTag($tag)
+    {
+        $this->notification->setTag($tag);
+        return $this;
+    }
+
+    /**
+     * @param array $titleLocArgs
+     * @return $this
+     */
+    public function setTitleLocArgs($titleLocArgs)
+    {
+        $this->notification->setTitleLocArgs($titleLocArgs);
+        return $this;
+    }
+
+    /**
+     * @param string $titleLocKey
+     * @return $this
+     */
+    public function setTitleLocKey($titleLocKey)
+    {
+        $this->notification->setTitleLocKey($titleLocKey);
         return $this;
     }
 

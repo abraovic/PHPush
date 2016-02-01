@@ -10,6 +10,7 @@ Contributions are welcome. We accept pull requests on [GitHub](https://github.co
 * Amar Banerjee - http://stackoverflow.com/questions/14563097/sending-multiple-iphone-push-notifications-apns-php-tutorial
 * Elad Nava - http://stackoverflow.com/questions/11242743/gcm-with-php-google-cloud-messaging
 * jshrek - http://stackoverflow.com/questions/10058768/php-apple-enhanced-push-notification-read-error-response
+* Ramon Carreras - http://stackoverflow.com/questions/16921189/how-to-parse-gcm-respond-to-remove-invalid-registration-id-from-server-with-php
 
 
 ## Reporting Bugs

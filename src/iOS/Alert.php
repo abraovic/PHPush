@@ -30,18 +30,18 @@ class Alert
     /**
      * @param string $title
      */
-    function __construct($title)
+    function __construct($body)
     {
-        $this->title = $title;
+        $this->title = $body;
     }
 
     /**
      * @param string $body
      * @return $this
      */
-    public function setBody($body)
+    public function setTitle($title)
     {
-        $this->body = $body;
+        $this->title = $title;
         return $this;
     }
 

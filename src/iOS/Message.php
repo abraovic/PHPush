@@ -41,9 +41,9 @@ class Message implements PHPush\Message
         return $this;
     }
 
-    public function setBody($body)
+    public function setBody($title)
     {
-        $this->alert->setBody($body);
+        $this->alert->setTitle($title);
         return $this;
     }
 

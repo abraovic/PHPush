@@ -59,7 +59,7 @@ class APNS implements PHPush\Push
         // Method getMessage has toArray behaviour. To manage
         // data easily let send them as an array to execute
         // method
-        return $this->execute($message->getMessage());
+        return $this->execute($message->getMessage()->toArray());
     }
 
     public function getService()
@@ -73,12 +73,22 @@ class APNS implements PHPush\Push
         return $this;
     }
 
+    /**
+     * Setup a identifier of a notification
+     * @param $identifier -> string value
+     * @return $this
+     */
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
         return $this;
     }
 
+    /**
+     * Setup a priority of a notification
+     * @param $priority
+     * @return $this
+     */
     public function setPriority($priority)
     {
         $this->priority = $priority;
@@ -132,8 +142,8 @@ class APNS implements PHPush\Push
         }else{
             $msg .= pack("C", 1).pack("C", 1).pack("C", 1).pack("C", 1);
         }
-        if(isset($this->expiry)){
-            $msg .= pack("N", $this->expiry);
+        if(isset($this->timeToLive)){
+            $msg .= pack("N", $this->timeToLive);
         }else{
             $msg .= pack("N", time()+(90 * 24 * 60 * 60));  // 90 days default
         }

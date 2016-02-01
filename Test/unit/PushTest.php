@@ -20,13 +20,13 @@ class PushTest extends \PHPUnit_Framework_TestCase
 
         $push = new PHPush\Push\Push($type, $credentials);
         $push->setNotificationTTL(123);
-        $push->setIdentifier('abc');
 
         $this->assertInstanceOf("\\abraovic\\PHPush\\Push", $push, "Object does not implement Push interface");
         $this->assertObjectHasAttribute("service", $push);
         $this->assertAttributeInstanceOf("\\abraovic\\PHPush\\iOS\\APNS", "service", $push);
 
         $apns = $push->getService();
+        $apns->setIdentifier("abc");
         $this->assertInstanceOf("\\abraovic\\PHPush\\iOS\\APNS",    $apns);
         $this->assertObjectHasAttribute("deviceToken",              $apns);
         $this->assertObjectHasAttribute("certificatePath",          $apns);
@@ -37,16 +37,15 @@ class PushTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute("identifier",               $apns);
         $this->assertObjectHasAttribute("priority",                 $apns);
 
-        $message = new PHPush\iOS\Message();
-        $this->assertInstanceOf("\\abraovic\\PHPush\\Message", $message, "Object does not implement Message interface");
-
-        $message->setAlert("This will be shown");
+        $message = new PHPush\Push\Message($type, "Here is a message");
         $message->setBadge(2);
-        $this->assertObjectHasAttribute("alert",                $message);
-        $this->assertObjectHasAttribute("badge",                $message);
-        $this->assertObjectHasAttribute("sound",                $message);
-        $this->assertObjectHasAttribute("contentAvailable",     $message);
-        $this->assertObjectHasAttribute("additionalProperties", $message);
+        $message->setBody("Some body");
+        $message->setAdditional(["add" => "data"]);
+        $iosMsg = $message->getMessage();
+        $iosMsg->setCategory("abc");
+
+        $this->assertAttributeInstanceOf("\\abraovic\\PHPush\\iOS\\Aps", "aps", $iosMsg);
+
     }
 
     /**
@@ -62,13 +61,13 @@ class PushTest extends \PHPUnit_Framework_TestCase
 
         $push = new PHPush\Push\Push($type, $credentials);
         $push->setNotificationTTL(123);
-        $push->setIdentifier('abc');
 
         $this->assertInstanceOf("\\abraovic\\PHPush\\Push", $push, "Object does not implement Push interface");
         $this->assertObjectHasAttribute("service", $push);
         $this->assertAttributeInstanceOf("\\abraovic\\PHPush\\Android\\GCM", "service", $push);
 
         $gcm = $push->getService();
+        $gcm->setRestrictedPackageName('abc');
         $this->assertInstanceOf("\\abraovic\\PHPush\\Android\\GCM", $gcm);
         $this->assertObjectHasAttribute("deviceToken",              $gcm);
         $this->assertObjectHasAttribute("googleApiKey",             $gcm);
@@ -76,13 +75,13 @@ class PushTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute("timeToLive",               $gcm);
         $this->assertObjectHasAttribute("restrictedPackageName",    $gcm);
 
-        $message = new PHPush\Android\Message();
-        $this->assertInstanceOf("\\abraovic\\PHPush\\Message", $message, "Object does not implement Message interface");
+        $message = new PHPush\Push\Message($type, "Here is a message");
+        $message->setBadge(20);
+        $message->setBody("Some body");
+        $message->setAdditional(["add" => "data"]);
+        $andMsg = $message->getMessage();
+        $andMsg->setDryRun(false);
 
-        $message->setData("data");
-        $message->setDelayWithIdle(1);
-        $this->assertObjectHasAttribute("data",             $message);
-        $this->assertObjectHasAttribute("delayWithIdle",    $message);
-        $this->assertObjectHasAttribute("dryRun",           $message);
+        $this->assertAttributeInstanceOf("\\abraovic\\PHPush\\Android\\Notification", "notification", $andMsg);
     }
 }

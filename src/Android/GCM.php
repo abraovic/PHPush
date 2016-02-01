@@ -78,9 +78,15 @@ class GCM  implements PHPush\Push
         return $this;
     }
 
-    public function setIdentifier($identifier)
+    /**
+     * Setup a restricted package name
+     * @param $restrictedPackageName -> string value
+     * @return $this
+     * @throws PHPushException
+     */
+    public function setRestrictedPackageName($restrictedPackageName)
     {
-        $this->restrictedPackageName = $identifier;
+        $this->restrictedPackageName = $restrictedPackageName;
         return $this;
     }
 

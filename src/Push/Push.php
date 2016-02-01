@@ -25,10 +25,10 @@ class Push implements PHPush\Push
     const IOS = 'iOS';
     const ANDROID = 'Android';
 
-    /** @var PHPush\Push $service */
     private $service;
     /** @var array $config */
     private $config;
+    private $type;
 
     /**
      * @param $type         ->  defines type of service identified by constants
@@ -43,10 +43,12 @@ class Push implements PHPush\Push
     function __construct($type, $credentials)
     {
         $this->config = $this->loadConfiguration();
+        $this->type = $type;
         $this->validateCredentials($type, $credentials);
 
         switch ($type) {
             case self::IOS:
+                /** @var PHPush\iOS\APNS $service */
                 $this->service = new PHPush\iOS\APNS(
                     $credentials['device_token'],
                     $credentials['certificate_path'],
@@ -56,6 +58,7 @@ class Push implements PHPush\Push
                 );
                 break;
             case self::ANDROID:
+                /** @var PHPush\Android\GCM $service */
                 $this->service = new PHPush\Android\GCM(
                     $credentials['device_token'],
                     $credentials['google_api_key'],
@@ -73,7 +76,24 @@ class Push implements PHPush\Push
 
     public function getService()
     {
-        return $this->service;
+        switch ($this->type) {
+            case self::IOS:
+                /** @var PHPush\iOS\APNS $svc */
+                $svc = $this->service;
+                break;
+            case self::ANDROID:
+                /** @var PHPush\Android\GCM $svc */
+                $svc = $this->service;
+                break;
+            default:
+                throw new PHPushException(
+                    "Unxeisting service called. Available services are [Push::IOS] and [Push::ANDROID]",
+                    500
+                );
+                break;
+        }
+
+        return $svc;
     }
 
     public function sendMessage(PHPush\Message $message)
@@ -84,11 +104,6 @@ class Push implements PHPush\Push
     public function setNotificationTTL($ttl)
     {
         return $this->service->setNotificationTTL($ttl);
-    }
-
-    public function setIdentifier($identifier)
-    {
-        return $this->service->setIdentifier($identifier);
     }
 
     public function checkPayload(PHPush\Message $message)

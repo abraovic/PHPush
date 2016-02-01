@@ -1,9 +1,6 @@
 <?php
 namespace abraovic\PHPush\iOS;
 
-use abraovic\PHPush;
-use abraovic\PHPush\Exception\PHPushException;
-
 /**
  *     Copyright 2016
  *
@@ -19,73 +16,32 @@ use abraovic\PHPush\Exception\PHPushException;
  *     @see: https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/TheNotificationPayload.html
  */
 
-class Message implements PHPush\Message
+class Alert
 {
-    /** @var Aps $aps */
-    private $aps;
-    /** @var Alert $alert */
-    private $alert;
-    private $additional = [];
+    private $title;
+    private $body;
+    private $titleLocKey;
+    private $titleLocArgs;
+    private $actionLocKey;
+    private $locKey;
+    private $locArgs;
+    private $launchImage;
 
     /**
      * @param string $title
      */
     function __construct($title)
     {
-        $this->alert = new Alert($title);
-        $this->aps = new Aps($this->alert);
+        $this->title = $title;
     }
 
-    public function getMessage()
-    {
-        return $this;
-    }
-
+    /**
+     * @param string $body
+     * @return $this
+     */
     public function setBody($body)
     {
-        $this->alert->setBody($body);
-        return $this;
-    }
-
-    public function setBadge($badge)
-    {
-        $this->aps->setBadge($badge);
-        return $this;
-    }
-
-    public function setAdditional($data)
-    {
-        $this->additional = $data;
-        return $this;
-    }
-
-    /**
-     * @param string $sound
-     * @return $this
-     */
-    public function setSound($sound)
-    {
-        $this->aps->setSound($sound);
-        return $this;
-    }
-
-    /**
-     * @param string $contentAvailable
-     * @return $this
-     */
-    public function setContentAvailable($contentAvailable)
-    {
-        $this->aps->setContentAvailable($contentAvailable);
-        return $this;
-    }
-
-    /**
-     * @param string $category
-     * @return $this
-     */
-    public function setCategory($category)
-    {
-        $this->aps->setCategory($category);
+        $this->body = $body;
         return $this;
     }
 
@@ -95,7 +51,7 @@ class Message implements PHPush\Message
      */
     public function setLaunchImage($launchImage)
     {
-        $this->alert->setLaunchImage($launchImage);
+        $this->launchImage = $launchImage;
         return $this;
     }
 
@@ -105,7 +61,7 @@ class Message implements PHPush\Message
      */
     public function setLocArgs($locArgs)
     {
-        $this->alert->setLocArgs($locArgs);
+        $this->locArgs = $locArgs;
         return $this;
     }
 
@@ -115,7 +71,7 @@ class Message implements PHPush\Message
      */
     public function setLocKey($locKey)
     {
-        $this->alert->setLocKey($locKey);
+        $this->locKey = $locKey;
         return $this;
     }
 
@@ -125,7 +81,7 @@ class Message implements PHPush\Message
      */
     public function setActionLocKey($actionLocKey)
     {
-        $this->alert->setActionLocKey($actionLocKey);
+        $this->actionLocKey = $actionLocKey;
         return $this;
     }
 
@@ -135,7 +91,7 @@ class Message implements PHPush\Message
      */
     public function setTitleLocArgs($titleLocArgs)
     {
-        $this->alert->setTitleLocArgs($titleLocArgs);
+        $this->titleLocArgs = $titleLocArgs;
         return $this;
     }
 
@@ -145,17 +101,36 @@ class Message implements PHPush\Message
      */
     public function setTitleLocKey($titleLocKey)
     {
-        $this->setTitleLocKey($titleLocKey);
+        $this->titleLocKey = $titleLocKey;
         return $this;
     }
 
     public function toArray()
     {
-        $rsp = ["aps" => $this->aps->toArray()];
-        if ($this->additional) {
-            $rsp = array_merge($rsp, $this->additional);
+        $array = ['title' => $this->title];
+
+        if ($this->body) {
+            $array['body'] = $this->body;
+        }
+        if ($this->titleLocKey) {
+            $array['title-loc-key'] = $this->titleLocKey;
+        }
+        if ($this->titleLocArgs) {
+            $array['title-loc-args'] = $this->titleLocArgs;
+        }
+        if ($this->actionLocKey) {
+            $array['action-loc-key'] = $this->actionLocKey;
+        }
+        if ($this->locKey) {
+            $array['loc-key'] = $this->locKey;
+        }
+        if ($this->locArgs) {
+            $array['loc-args'] = $this->locArgs;
+        }
+        if ($this->launchImage) {
+            $array['launch-image'] = $this->launchImage;
         }
 
-        return $rsp;
+        return $array;
     }
 } 

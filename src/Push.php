@@ -1,6 +1,8 @@
 <?php
 namespace abraovic\PHPush;
 
+use abraovic\PHPush\Exception\PHPushException;
+
 /**
  *     Copyright 2016
  *
@@ -21,6 +23,7 @@ interface Push
      *     @return true on success
      */
     public function sendMessage(Message $message);
+
     /**
      *     Setup a lifetime of a notification
      *     @param $ttl -> integer value in seconds
@@ -32,26 +35,12 @@ interface Push
      *          GCM. Generally this property is part of message in GCM but a part
      *          of header (or metadata) in APNS.
      */
-
     public function setNotificationTTL($ttl);
-    /**
-     *     Setup a identifier of a notification
-     *     @param $identifier -> string value
-     *     @return $this
-     *
-     *     NOTICE:
-     *          This property has different meaning in APNS that in GCM. To fully understand
-     *          this you should read following docs (or at least important parts):
-     *          @see: http://developer.android.com/google/gcm/server.html
-     *                -> GCM (Table 1. Message parameters.)
-     *          @see: https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html
-     *                -> APNS (Table 3-1  Keys and values of the aps dictionary)
-     */
-
-    public function setIdentifier($identifier);
 
     /**
-     *     Gets current active service
+     * Gets current active service
+     * @return $this
+     * @throws PHPushException
      */
     public function getService();
 

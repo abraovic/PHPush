@@ -22,51 +22,98 @@ use abraovic\PHPush\Exception\PHPushException;
 
 class Message implements PHPush\Message
 {
-    private $data;
+    /** @var Notification $notification */
+    private $notification;
+    private $data = [];
     private $delayWithIdle;
     private $dryRun;
+    private $collapseKey;
+    private $additional;
+
+    /**
+     * @param string $title
+     */
+    function __construct($title)
+    {
+        $this->notification = new Notification($title);
+    }
 
     public function getMessage()
     {
-        $message = array();
-        if(isset($this->data)){
-            $message['field'] = $this->data;
-        }else{
-            throw new PHPushException(
-                '[Android]: You must set data property',
-                500
-            );
-        }
-        if(isset($this->delayWithIdle)){
-            $message['delay_while_idle'] = $this->delayWithIdle;
-        }
-        if(isset($this->dryRun)){
-            $message['dry_run'] = $this->dryRun;
-        }
-        return $message;
+        return $this;
+    }
+
+    public function setBody($body)
+    {
+        $this->notification->setBody($body);
+        return $this;
+    }
+
+    public function setBadge($badge)
+    {
+        $this->data['badge'] = $badge;
+    }
+
+    public function setAdditional($data)
+    {
+        $this->additional = $data;
     }
 
     /**
-     * @param mixed $data
+     * @param string $collapseKey
+     * @return $this
      */
-    public function setData($data)
+    public function setCollapseKey($collapseKey)
     {
-        $this->data = $data;
+        $this->collapseKey = $collapseKey;
+        return $this;
     }
 
     /**
      * @param int $delayWithIdle
+     * @return $this
      */
     public function setDelayWithIdle($delayWithIdle)
     {
         $this->delayWithIdle = $delayWithIdle;
+        return $this;
     }
 
     /**
      * @param boolean $dryRun
+     * @return $this
      */
     public function setDryRun($dryRun)
     {
         $this->dryRun = $dryRun;
+        return $this;
+    }
+
+    /**
+     * @param string $icon
+     * @return $this
+     */
+    public function setIcon($icon)
+    {
+        $this->notification->setIcon($icon);
+        return $this;
+    }
+
+    public function toArray()
+    {
+        $array = [
+            'notification' => $this->notification->toArray(),
+            'data' => $this->data
+        ];
+
+        if ($this->additional) {
+            if (isset($array['data'])) {
+                $array['data'] = array_merge($array['data'], $this->additional);
+            } else {
+                $array['data'] = $this->additional;
+            }
+        }
+
+        return $array;
     }
 }

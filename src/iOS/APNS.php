@@ -135,23 +135,14 @@ class APNS implements PHPush\Push
             );
         }
 
-        /// bulid message
-        $msg =  chr(0) . pack('n', 32) . pack('H*', $this->deviceToken) . pack('n', strlen($payload)) . $payload;
-        if(isset($this->identifier)){
-            $msg .= pack("N", $this->identifier);
-        }else{
-            $msg .= pack("C", 1).pack("C", 1).pack("C", 1).pack("C", 1);
+        $result = false;
+        if (is_array($this->deviceToken)) {
+            foreach ($this->deviceToken as $token) {
+                $result = $this->buildAndSend($fp, $token, $payload);
+            }
+        } else {
+           $result = $this->buildAndSend($fp, $this->deviceToken, $payload);
         }
-        if(isset($this->timeToLive)){
-            $msg .= pack("N", $this->timeToLive);
-        }else{
-            $msg .= pack("N", time()+(90 * 24 * 60 * 60));  // 90 days default
-        }
-        if(isset($this->priority)){
-            $msg .= pack("N", $this->priority);
-        }
-        $result = fwrite($fp, $msg, strlen($msg));
-        $this->checkAppleErrorResponse($fp);
         fclose($fp);
 
         if (!$result) {
@@ -162,6 +153,36 @@ class APNS implements PHPush\Push
         }
 
         return true;
+    }
+
+    /**
+     * @param $fp -> ss client
+     * @param $token -> device token
+     * @param $payload -> device payload
+     *
+     * @return true
+     */
+    private function buildAndSend($fp, $token, $payload)
+    {
+        /// bulid message
+        $msg =  chr(0) . pack('n', 32) . pack('H*', $token) . pack('n', strlen($payload)) . $payload;
+        if (isset($this->identifier)) {
+            $msg .= pack("N", $this->identifier);
+        } else {
+            $msg .= pack("C", 1).pack("C", 1).pack("C", 1).pack("C", 1);
+        }
+        if (isset($this->timeToLive)) {
+            $msg .= pack("N", $this->timeToLive);
+        } else {
+            $msg .= pack("N", time()+(90 * 24 * 60 * 60));  // 90 days default
+        }
+        if (isset($this->priority)) {
+            $msg .= pack("N", $this->priority);
+        }
+        $result = fwrite($fp, $msg, strlen($msg));
+        $this->checkAppleErrorResponse($fp);
+
+        return $result;
     }
 
     /**

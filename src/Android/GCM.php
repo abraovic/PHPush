@@ -59,9 +59,15 @@ class GCM  implements PHPush\Push
             $gcmData['restricted_package_name'] = $this->restrictedPackageName;
         }
 
-        $parameters = array(
-            'to' => $this->deviceToken,
-        );
+        if (is_array($this->deviceToken)) {
+            $parameters = array(
+                'registration_ids' => $this->deviceToken,
+            );
+        } else {
+            $parameters = array(
+                'to' => $this->deviceToken,
+            );
+        }
 
         $parameters = array_merge($parameters, $gcmData);
 

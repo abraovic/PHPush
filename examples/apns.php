@@ -9,7 +9,7 @@ try {
 
     $type = PHPush\Push\Push::IOS;
     $credentials = [
-        'device_token' => 'fake-token',
+        'device_token' => 'fake-token', // for multiple use an array 'device_token' => ['fake-token-1', 'fake-token-2', ...]
         'certificate_path' => 'fake-cert',
         'certificate_phrase' => '',
         'dev' => true

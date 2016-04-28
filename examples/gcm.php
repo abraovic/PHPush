@@ -9,7 +9,7 @@ try {
 
     $type = PHPush\Push\Push::ANDROID;
     $credentials = [
-        'device_token' => 'fake-token',
+        'device_token' => 'fake-token', // for multiple use an array 'device_token' => ['fake-token-1', 'fake-token-2', ...]
         'google_api_key' => 'fake-api'
     ];
 

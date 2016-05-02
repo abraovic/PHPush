@@ -119,12 +119,18 @@ class GCM  implements PHPush\Push
                 500
             );
         }
+        $payload = json_encode($parameters);
+
+        if (PHPush\Push\Push::$printPayload) {
+            var_dump($payload);
+        }
+
         curl_setopt($ch, CURLOPT_URL, $this->settings['android']['socket_url']['production']);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parameters));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         $result = curl_exec($ch);
         curl_close($ch);
         $this->checkGoogleErrorResponse($result);
@@ -170,7 +176,7 @@ class GCM  implements PHPush\Push
                                     break;
                                 case "Unavailable":
                                 case "InternalServerError":
-                                $error_response['rsp'] = 'You could retry to send it late in another request.';
+                                    $error_response['rsp'] = 'You could retry to send it late in another request.';
                                     break;
                                 case "MissingRegistration":
                                     $error_response['rsp'] = 'Check that the request contains a registration ID';

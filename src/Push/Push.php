@@ -30,6 +30,9 @@ class Push implements PHPush\Push
     private $config;
     private $type;
 
+    // if it is set as true payload wil bi printed on stdout as var_dump(payload)
+    public static $printPayload = false;
+
     /**
      * @param $type         ->  defines type of service identified by constants
      *                          example $type = Push::IOS

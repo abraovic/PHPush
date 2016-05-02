@@ -135,6 +135,11 @@ class APNS implements PHPush\Push
             );
         }
 
+        // it is dumped here because we won't it to be dumped on each stream wtite
+        if (PHPush\Push\Push::$printPayload) {
+            var_dump($payload);
+        }
+
         $result = false;
         if (is_array($this->deviceToken)) {
             foreach ($this->deviceToken as $token) {

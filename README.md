@@ -29,10 +29,13 @@ try {
         'dev' => true
     ];
 
+    // enable printing payload before send (for development purpose)
+    PHPush\Push\Push::$printPayload = true;
+
     $push = new PHPush\Push\Push($type, $credentials);
     $message = new PHPush\Push\Message($type, "Hello");
     $message->setBadge(200);
-    $message->setBody('bodi');
+    $message->setBody('body');
     $iosMsg = $message->getMessage();
     $iosMsg->setSound('default');
 

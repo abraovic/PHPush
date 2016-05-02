@@ -12,6 +12,9 @@ try {
         'device_token' => 'fake-token', // for multiple use an array 'device_token' => ['fake-token-1', 'fake-token-2', ...]
         'google_api_key' => 'fake-api'
     ];
+    
+    // enable printing payload before send (for development purpose)
+    PHPush\Push\Push::$printPayload = true;
 
     $push = new PHPush\Push\Push($type, $credentials);
     $message = new PHPush\Push\Message($type, "Hello");

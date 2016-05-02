@@ -144,6 +144,15 @@ class Push implements PHPush\Push
      */
     private function validateCredentials($type, $credentials)
     {
+        if (is_array($credentials['device_token'])) {
+            if (count($credentials['device_token']) > 1000) {
+                throw new PHPush\Exception\InvalidCredentialsException(
+                    "You have exceeded max of 1000 tokens that can be used in a single connection",
+                    401
+                );
+            }
+        }
+
         switch ($type) {
             case self::IOS:
                 $countOk = 0;

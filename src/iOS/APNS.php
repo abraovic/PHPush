@@ -120,13 +120,21 @@ class APNS implements PHPush\Push
             $socketUrl = $this->settings['ios']['socket_url']['development'];
         }
 
-        $fp = stream_socket_client($socketUrl, $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
-        if (!$fp) {
+        try {
+            $fp = stream_socket_client($socketUrl, $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+            if (!$fp) {
+                throw new PHPushException(
+                    '[iOS]: Connection to third-party service failed!',
+                    500
+                );
+            }
+        } catch (\Exception $e) {
             throw new PHPushException(
-                '[iOS]: Connection to third-party service failed!',
+                '[iOS]: Connection to third-party service failed! - Exception message: ' . $e->getMessage() ,
                 500
             );
         }
+
         $payload = json_encode($parameters);
         if (mb_strlen($payload) > 250) {
             throw new PHPushException(

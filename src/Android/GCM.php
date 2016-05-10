@@ -206,7 +206,7 @@ class GCM  implements PHPush\Push
                             }
 
                             throw new PHPushException(
-                                "[Android]: APNS error response: [" . $error_response['command']. "]",
+                                "[Android]: APNS error response: [" . $error_response['rsp']. "]",
                                 500
                             );
                         }

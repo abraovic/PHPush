@@ -30,7 +30,7 @@ class PushTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf("\\abraovic\\PHPush\\iOS\\APNS",    $apns);
         $this->assertObjectHasAttribute("deviceToken",              $apns);
         $this->assertObjectHasAttribute("certificatePath",          $apns);
-        $this->assertObjectHasAttribute("certificateParaphrase",    $apns);
+        $this->assertObjectHasAttribute("certificatePassphrase",    $apns);
         $this->assertObjectHasAttribute("settings",                 $apns);
         $this->assertObjectHasAttribute("development",              $apns);
         $this->assertObjectHasAttribute("timeToLive",               $apns);

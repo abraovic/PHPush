@@ -22,9 +22,12 @@ use abraovic\PHPush\Exception\PHPushException;
 
 class APNS implements PHPush\Push
 {
+    const SOCKET_SELECT_TIMEOUT = 1000000;
+
+    private $socketPointer;
     private $deviceToken;
     private $certificatePath;
-    private $certificateParaphrase;
+    private $certificatePassphrase;
     private $settings;
     private $development;
     private $timeToLive;
@@ -48,7 +51,7 @@ class APNS implements PHPush\Push
     ) {
         $this->deviceToken = $deviceToken;
         $this->certificatePath = $certificatePath;
-        $this->certificateParaphrase = $certificateParaphrase;
+        $this->certificatePassphrase = $certificateParaphrase;
 
         $this->settings = $settings;
         $this->development = $development;
@@ -105,6 +108,43 @@ class APNS implements PHPush\Push
     }
 
     /**
+     * Open connection to APNS
+     */
+    private function connect()
+    {
+        $ctx = stream_context_create();
+        stream_context_set_option($ctx, 'ssl', 'local_cert', $this->certificatePath);
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $this->certificatePassphrase);
+        $socketUrl = $this->settings['ios']['socket_url']['production'];
+        if ($this->development) {
+            $socketUrl = $this->settings['ios']['socket_url']['development'];
+        }
+
+        try {
+            $this->socketPointer = stream_socket_client($socketUrl, $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+            if (!$this->socketPointer) {
+                throw new PHPushException(
+                    '[iOS]: Connection to third-party service failed!',
+                    500
+                );
+            }
+        } catch (\Exception $e) {
+            throw new PHPushException(
+                '[iOS]: Connection to third-party service failed! - Exception message: ' . $e->getMessage() ,
+                500
+            );
+        }
+    }
+
+    /**
+     * Close connection to APNS
+     */
+    public function disconnect()
+    {
+        fclose($this->socketPointer);
+    }
+
+    /**
      *     @param $parameters -> array of data that will be sent to
      *                           APNS server
      *     @throws PHPushException
@@ -112,13 +152,7 @@ class APNS implements PHPush\Push
      */
     private function execute($parameters)
     {
-        $ctx = stream_context_create();
-        stream_context_set_option($ctx, 'ssl', 'local_cert', $this->certificatePath);
-        stream_context_set_option($ctx, 'ssl', 'passphrase', $this->certificateParaphrase);
-        $socketUrl = $this->settings['ios']['socket_url']['production'];
-        if ($this->development) {
-            $socketUrl = $this->settings['ios']['socket_url']['development'];
-        }
+        $this->connect();
 
         $payload = json_encode($parameters);
         if (mb_strlen($payload) > 250) {
@@ -128,50 +162,23 @@ class APNS implements PHPush\Push
             );
         }
 
-        // it is dumped here because we won't it to be dumped on each stream write
-        if (PHPush\Push\Push::$printPayload) {
-            var_dump($payload);
-        }
-
         $result = false;
         if (is_array($this->deviceToken)) {
-            foreach ($this->deviceToken as $token) {
-                try {
-                    $fp = stream_socket_client($socketUrl, $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
-                    if (!$fp) {
-                        throw new PHPushException(
-                            '[iOS]: Connection to third-party service failed!',
-                            500
-                        );
-                    }
-                } catch (\Exception $e) {
-                    throw new PHPushException(
-                        '[iOS]: Connection to third-party service failed! - Exception message: ' . $e->getMessage() ,
-                        500
-                    );
-                }
-                $result = $this->buildAndSend($fp, $token, $payload);
-                fclose($fp);
+            $counter = 0;
+            while (count($this->deviceToken) > 0) {
+                $result = $this->buildAndSend(
+                    $this->deviceToken[$counter],
+                    $payload
+                );
+                $this->skipOnFailed($counter);
+
+                $counter++;
             }
         } else {
-            try {
-                $fp = stream_socket_client($socketUrl, $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
-                if (!$fp) {
-                    throw new PHPushException(
-                        '[iOS]: Connection to third-party service failed!',
-                        500
-                    );
-                }
-            } catch (\Exception $e) {
-                throw new PHPushException(
-                    '[iOS]: Connection to third-party service failed! - Exception message: ' . $e->getMessage() ,
-                    500
-                );
-            }
-
-            $result = $this->buildAndSend($fp, $this->deviceToken, $payload);
-            fclose($fp);
+            $result = $this->buildAndSend($this->deviceToken, $payload);
         }
+
+        $this->disconnect();
 
         if (!$result) {
             throw new PHPushException(
@@ -184,13 +191,13 @@ class APNS implements PHPush\Push
     }
 
     /**
-     * @param $fp -> ss client
+     * Create binary package and write it to a stream
      * @param $token -> device token
      * @param $payload -> device payload
      *
      * @return true
      */
-    private function buildAndSend($fp, $token, $payload)
+    private function buildAndSend($token, $payload)
     {
         /// bulid message
         $msg =  chr(0) . pack('n', 32) . pack('H*', $token) . pack('n', strlen($payload)) . $payload;
@@ -207,10 +214,32 @@ class APNS implements PHPush\Push
         if (isset($this->priority)) {
             $msg .= pack("N", $this->priority);
         }
-        $result = fwrite($fp, $msg, strlen($msg));
-        $this->checkAppleErrorResponse($fp);
+        $result = fwrite($this->socketPointer, $msg);
+        $this->checkAppleErrorResponse($this->socketPointer);
 
         return $result;
+    }
+
+    /**
+     * Check stream and re-connect to APNS if need
+     * @param $position
+     */
+    private function skipOnFailed($position)
+    {
+        $read = [$this->socketPointer];
+        $null = NULL;
+        $changedStream = @stream_select($read, $null, $null, 0, self::SOCKET_SELECT_TIMEOUT);
+
+        // if stream select is > 1 that means there was an issue with writing
+        // to APNS socket which means we need to re-establish socket connection
+        // and continue sending rest of notifications
+        if ($changedStream > 0) {
+            $this->disconnect();
+            $this->connect();
+        }
+
+        // remove token from the list after it has been used
+        unset($this->deviceToken[$position]);
     }
 
     /**

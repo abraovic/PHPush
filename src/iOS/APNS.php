@@ -22,7 +22,7 @@ use abraovic\PHPush\Exception\PHPushException;
 
 class APNS implements PHPush\Push
 {
-    const SOCKET_SELECT_TIMEOUT = 1000000;
+    const SOCKET_SELECT_TIMEOUT = 200000;
 
     private $socketPointer;
     private $deviceToken;

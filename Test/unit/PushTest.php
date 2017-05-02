@@ -49,9 +49,9 @@ class PushTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group gcm
+     * @group fcm
      */
-    public function testGCM()
+    public function testFCM()
     {
         $type = PHPush\Push\Push::ANDROID;
         $credentials = [
@@ -64,16 +64,16 @@ class PushTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf("\\abraovic\\PHPush\\Push", $push, "Object does not implement Push interface");
         $this->assertObjectHasAttribute("service", $push);
-        $this->assertAttributeInstanceOf("\\abraovic\\PHPush\\Android\\GCM", "service", $push);
+        $this->assertAttributeInstanceOf("\\abraovic\\PHPush\\Android\\FCM", "service", $push);
 
-        $gcm = $push->getService();
-        $gcm->setRestrictedPackageName('abc');
-        $this->assertInstanceOf("\\abraovic\\PHPush\\Android\\GCM", $gcm);
-        $this->assertObjectHasAttribute("deviceToken",              $gcm);
-        $this->assertObjectHasAttribute("googleApiKey",             $gcm);
-        $this->assertObjectHasAttribute("settings",                 $gcm);
-        $this->assertObjectHasAttribute("timeToLive",               $gcm);
-        $this->assertObjectHasAttribute("restrictedPackageName",    $gcm);
+        $fcm = $push->getService();
+        $fcm->setRestrictedPackageName('abc');
+        $this->assertInstanceOf("\\abraovic\\PHPush\\Android\\FCM", $fcm);
+        $this->assertObjectHasAttribute("deviceToken",              $fcm);
+        $this->assertObjectHasAttribute("googleApiKey",             $fcm);
+        $this->assertObjectHasAttribute("settings",                 $fcm);
+        $this->assertObjectHasAttribute("timeToLive",               $fcm);
+        $this->assertObjectHasAttribute("restrictedPackageName",    $fcm);
 
         $message = new PHPush\Push\Message($type, "Here is a message");
         $message->setBadge(20);

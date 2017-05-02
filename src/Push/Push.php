@@ -61,8 +61,8 @@ class Push implements PHPush\Push
                 );
                 break;
             case self::ANDROID:
-                /** @var PHPush\Android\GCM $service */
-                $this->service = new PHPush\Android\GCM(
+                /** @var PHPush\Android\FCM $service */
+                $this->service = new PHPush\Android\FCM(
                     $credentials['device_token'],
                     $credentials['google_api_key'],
                     $this->config
@@ -85,7 +85,7 @@ class Push implements PHPush\Push
                 $svc = $this->service;
                 break;
             case self::ANDROID:
-                /** @var PHPush\Android\GCM $svc */
+                /** @var PHPush\Android\FCM $svc */
                 $svc = $this->service;
                 break;
             default:

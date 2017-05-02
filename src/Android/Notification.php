@@ -13,7 +13,8 @@ namespace abraovic\PHPush\Android;
  *     @author Ante Braović - abraovic@gmail.com - antebraovic.me
  *
  *     For more documentation:
- *     @see: https://developers.google.com/cloud-messaging/concept-options#notifications_and_data_messages
+ *     @see: https://firebase.google.com/docs/cloud-messaging/http-server-ref#notification-payload-support
+ *           Table 2b. Android — keys for notification messages
  */
 
 class Notification

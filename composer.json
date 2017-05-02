@@ -4,7 +4,7 @@
     "description": "Send push notifications to iOS and Android by PHP",
     "homepage": "https://github.com/abraovic/PHPush",
     "license": "Apache-2.0",
-    "keywords": ["push", "apns", "gcm"],
+    "keywords": ["push", "apns", "fcm"],
     "authors": [
         {
             "name": "Ante Braovic",

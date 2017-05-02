@@ -30,9 +30,9 @@ interface Push
      *     @return $this
      *
      *     NOTICE:
-     *          This property is differently managed by APNS and GCM. This lib
+     *          This property is differently managed by APNS and FCM. This lib
      *          tries to unify the way of setting this value for both APNS and
-     *          GCM. Generally this property is part of message in GCM but a part
+     *          FCM. Generally this property is part of message in FCM but a part
      *          of header (or metadata) in APNS.
      */
     public function setNotificationTTL($ttl);

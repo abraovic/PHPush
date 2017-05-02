@@ -16,10 +16,10 @@ use abraovic\PHPush\Exception\PHPushException;
  *     @author Ante Braović - abraovic@gmail.com - antebraovic.me
  *
  *     This class is used to send a notification to Google Cloud Messaging
- *     (GCM) server.
+ *     (FCM) server.
  */
 
-class GCM  implements PHPush\Push
+class FCM  implements PHPush\Push
 {
     private $deviceToken;
     private $googleApiKey;
@@ -49,14 +49,14 @@ class GCM  implements PHPush\Push
             'Content-Type: application/json'
         );
 
-        $gcmData = $message->getMessage()->toArray();
+        $fcmData = $message->getMessage()->toArray();
 
         if(isset($this->timeToLive)){
-            $gcmData['time_to_live'] = $this->timeToLive;
+            $fcmData['time_to_live'] = $this->timeToLive;
         }
 
         if(isset($this->restrictedPackageName)){
-            $gcmData['restricted_package_name'] = $this->restrictedPackageName;
+            $fcmData['restricted_package_name'] = $this->restrictedPackageName;
         }
 
         if (is_array($this->deviceToken)) {
@@ -69,7 +69,7 @@ class GCM  implements PHPush\Push
             );
         }
 
-        $parameters = array_merge($parameters, $gcmData);
+        $parameters = array_merge($parameters, $fcmData);
 
         return $this->execute($parameters, $headers);
     }
@@ -99,13 +99,13 @@ class GCM  implements PHPush\Push
 
     public function checkPayload(PHPush\Message $message)
     {
-        // GCM does not have any limit at the time so it will return true
+        // FCM does not have any limit at the time so it will return true
         return true;
     }
 
     /**
      *     @param $parameters -> array of data that will be sent to
-     *                           GCM server
+     *                           FCM server
      *     @param $headers
      *     @throws PHPushException
      *     @return true on success
@@ -146,7 +146,7 @@ class GCM  implements PHPush\Push
     }
 
     /**
-     * Parse error response from GCM
+     * Parse error response from FCM
      * @param $result
      * @return bool
      * @throws PHPushException
@@ -154,6 +154,12 @@ class GCM  implements PHPush\Push
     private function checkGoogleErrorResponse($result)
     {
         $jsonArray = json_decode($result);
+        if (!$jsonArray) {
+            throw new PHPushException(
+                "[Android]: FCM returned non standard response. It might be the problem with your API key.",
+                500
+            );
+        }
 
         if($jsonArray->canonical_ids != 0 || $jsonArray->failure != 0){
             if(!empty($jsonArray->results))
@@ -191,7 +197,7 @@ class GCM  implements PHPush\Push
                                     $error_response['rsp'] = 'Check that the total size of the payload data included in a message does not exceed 4096 bytes';
                                     break;
                                 case "InvalidDataKey":
-                                    $error_response['rsp'] = 'Check that the payload data does not contain a key that is used internally by GCM.';
+                                    $error_response['rsp'] = 'Check that the payload data does not contain a key that is used internally by FCM.';
                                     break;
                                 case "InvalidTtl":
                                     $error_response['rsp'] = 'Check that the value used in time_to_live is an integer representing a duration in seconds between 0 and 2,419,200.';
@@ -206,7 +212,7 @@ class GCM  implements PHPush\Push
                             }
 
                             throw new PHPushException(
-                                "[Android]: GCM error response: [" . $error_response['rsp']. "]",
+                                "[Android]: FCM error response: [" . $error_response['rsp']. "]",
                                 500
                             );
                         }

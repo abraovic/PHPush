@@ -16,12 +16,16 @@ use abraovic\PHPush\Exception\PHPushException;
  *     @author Ante Braović - abraovic@gmail.com - antebraovic.me
  *
  *     For more documentation:
- *     @see: http://developer.android.com/google/gcm/server.html
- *           Table 1. Message parameters
+ *     @see: https://firebase.google.com/docs/cloud-messaging/http-server-ref#downstream-http-messages-json
+ *           Table 1. Targets, options, and payload for downstream HTTP messages (JSON).
  */
 
 class Message implements PHPush\Message
 {
+    // priority types are limited to only two options so let those be selectable
+    const FCM_MSG_PRIORITY_NORMAL = "normal";
+    const FCM_MSG_PRIORITY_HIGH = "high";
+
     /** @var Notification $notification */
     private $notification;
     private $data = [];
@@ -29,6 +33,7 @@ class Message implements PHPush\Message
     private $dryRun;
     private $collapseKey;
     private $additional;
+    private $priority = self::FCM_MSG_PRIORITY_NORMAL;
 
     /**
      * @param string $title
@@ -179,6 +184,22 @@ class Message implements PHPush\Message
     {
         $this->notification->setTitleLocKey($titleLocKey);
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param string $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
     }
 
     public function toArray()

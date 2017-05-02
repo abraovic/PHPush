@@ -18,8 +18,8 @@ Supported methods:
 * setIdentifier($identifier)
 * setPriority($priority)
 
-### GCM - Google Cloud Messaging
-> To learn more about this service go to [official GCM site](https://developers.google.com/cloud-messaging/).
+### FCM - Firebase Cloud Messaging
+> To learn more about this service go to [official FCM site](https://firebase.google.com/).
 
 Supported methods:
 * setRestrictedPackageName($restrictedPackageName)

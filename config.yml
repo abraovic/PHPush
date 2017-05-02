@@ -10,7 +10,7 @@ ios:
         - dev
 android:
     socket_url:
-        production: https://android.googleapis.com/gcm/send
+        production: https://fcm.googleapis.com/fcm/send
         developemnt: %production%
     credentials:
         - device_token

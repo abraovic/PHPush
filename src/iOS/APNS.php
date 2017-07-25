@@ -101,7 +101,7 @@ class APNS implements PHPush\Push
     public function checkPayload(PHPush\Message $message)
     {
         $payload = json_encode($message->getMessage());
-        if(mb_strlen($payload) > 250) {
+        if(mb_strlen($payload) > 2048) {
             return false;
         }
         return true;
@@ -155,9 +155,9 @@ class APNS implements PHPush\Push
         $this->connect();
 
         $payload = json_encode($parameters);
-        if (mb_strlen($payload) > 250) {
+        if (mb_strlen($payload) > 2048) {
             throw new PHPushException(
-                '[iOS]: Message too long! Your entire payload should  not contain more that 250 chars',
+                '[iOS]: Message too long! Your entire payload should  not contain more that 2048 chars',
                 500
             );
         }

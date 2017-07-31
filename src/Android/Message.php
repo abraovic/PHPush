@@ -206,7 +206,8 @@ class Message implements PHPush\Message
     {
         $array = [
             'notification' => $this->notification->toArray(),
-            'data' => $this->data
+            'data' => $this->data,
+            'collapse_key' => $this->collapseKey
         ];
 
         if ($this->additional) {

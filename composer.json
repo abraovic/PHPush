@@ -3,7 +3,7 @@
     "type": "library",
     "description": "Send push notifications to iOS and Android by PHP",
     "homepage": "https://github.com/abraovic/PHPush",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "keywords": ["push", "apns", "fcm"],
     "authors": [
         {
@@ -17,7 +17,7 @@
         "source": "https://github.com/abraovic/phpush"
     },
     "require": {
-        "php": ">=5.3",
+        "php": ">=7.1",
         "lib-curl": "*",
         "symfony/yaml": ">=2.8"
     },

@@ -54,7 +54,7 @@ Contributions are welcome! Please read [CONTRIBUTING][] for details.
 
 ## Copyright and license
 
-The abraovic/phpush library is copyright © [Ante Braovic](http://antebraovic.me) and licensed for use under the Apache2 License.
+The abraovic/phpush library is copyright © [Ante Braovic](http://antebraovic.me) and licensed for use under the MIT License.
 
 [packagist]: https://packagist.org/packages/abraovic/phpush
 [composer]: http://getcomposer.org/

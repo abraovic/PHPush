@@ -37,11 +37,11 @@ class APNS implements PHPush\Push
      *     @param $development -> if true development url will be used
      */
     function __construct(
-        $deviceToken,
-        $certificatePath,
-        $certificateParaphrase,
-        $settings,
-        $development = false
+        string $deviceToken,
+        string $certificatePath,
+        string $certificateParaphrase,
+        array $settings,
+        bool $development = false
     ) {
         $this->deviceToken = $deviceToken;
         $this->certificatePath = $certificatePath;
@@ -51,7 +51,12 @@ class APNS implements PHPush\Push
         $this->development = $development;
     }
 
-    public function sendMessage(PHPush\Message $message)
+    /**
+     * @param PHPush\Message $message
+     * @return bool
+     * @throws PHPushException
+     */
+    public function sendMessage(PHPush\Message $message): bool
     {
         // Method getMessage has toArray behaviour. To manage
         // data easily let send them as an array to execute
@@ -59,12 +64,12 @@ class APNS implements PHPush\Push
         return $this->execute($message->getMessage()->toArray());
     }
 
-    public function getService()
+    public function getService(): PHPush\Push
     {
         return $this;
     }
 
-    public function setNotificationTTL($ttl)
+    public function setNotificationTTL(int $ttl): PHPush\Push
     {
         $this->timeToLive = $ttl;
         return $this;
@@ -73,9 +78,9 @@ class APNS implements PHPush\Push
     /**
      * Setup a identifier of a notification
      * @param $identifier -> string value
-     * @return $this
+     * @return APNS
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier($identifier): APNS
     {
         $this->identifier = $identifier;
         return $this;
@@ -84,15 +89,15 @@ class APNS implements PHPush\Push
     /**
      * Setup a priority of a notification
      * @param $priority
-     * @return $this
+     * @return APNS
      */
-    public function setPriority($priority)
+    public function setPriority($priority): APNS
     {
         $this->priority = $priority;
         return $this;
     }
 
-    public function checkPayload(PHPush\Message $message)
+    public function checkPayload(PHPush\Message $message): bool
     {
         $payload = json_encode($message->getMessage());
         if(mb_strlen($payload) > 2048) {
@@ -103,8 +108,9 @@ class APNS implements PHPush\Push
 
     /**
      * Open connection to APNS
+     * @throws PHPushException
      */
-    private function connect()
+    private function connect(): void
     {
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $this->certificatePath);
@@ -133,18 +139,18 @@ class APNS implements PHPush\Push
     /**
      * Close connection to APNS
      */
-    public function disconnect()
+    public function disconnect(): void
     {
         fclose($this->socketPointer);
     }
 
     /**
-     *     @param $parameters -> array of data that will be sent to
-     *                           APNS server
+     *     @param array $parameters ->  array of data that will be sent to
+     *                                  APNS server
      *     @throws PHPushException
-     *     @return true on success
+     *     @return bool
      */
-    private function execute($parameters)
+    private function execute(array $parameters): bool
     {
         $this->connect();
 
@@ -186,12 +192,12 @@ class APNS implements PHPush\Push
 
     /**
      * Create binary package and write it to a stream
-     * @param $token -> device token
-     * @param $payload -> device payload
-     *
-     * @return true
+     * @param string $token -> device token
+     * @param string $payload -> device payload
+     * @return bool
+     * @throws PHPushException
      */
-    private function buildAndSend($token, $payload)
+    private function buildAndSend(string $token, string $payload): bool
     {
         /// bulid message
         $msg =  chr(0) . pack('n', 32) . pack('H*', $token) . pack('n', strlen($payload)) . $payload;
@@ -216,9 +222,10 @@ class APNS implements PHPush\Push
 
     /**
      * Check stream and re-connect to APNS if need
-     * @param $position
+     * @param int$position
+     * @throws PHPushException
      */
-    private function skipOnFailed($position)
+    private function skipOnFailed(int $position): void
     {
         $read = [$this->socketPointer];
         $null = NULL;
@@ -239,10 +246,9 @@ class APNS implements PHPush\Push
     /**
      * Parse error response from APNS
      * @param $fp
-     * @return bool
      * @throws PHPushException
      */
-    private function checkAppleErrorResponse($fp)
+    private function checkAppleErrorResponse($fp): void
     {
         stream_set_blocking($fp, 0);
         $apple_error_response = fread($fp, 6);

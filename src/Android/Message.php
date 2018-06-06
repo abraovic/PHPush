@@ -2,7 +2,6 @@
 namespace abraovic\PHPush\Android;
 
 use abraovic\PHPush;
-use abraovic\PHPush\Exception\PHPushException;
 
 /**
  *     Copyright 2016
@@ -32,39 +31,39 @@ class Message implements PHPush\Message
     /**
      * @param string $title
      */
-    function __construct($title)
+    function __construct(string $title)
     {
         $this->notification = new Notification($title);
     }
 
-    public function getMessage()
+    public function getMessage(): PHPush\Message
     {
         return $this;
     }
 
-    public function setBody($body)
+    public function setBody(string $body): PHPush\Message
     {
         $this->notification->setBody($body);
         return $this;
     }
 
-    public function setBadge($badge)
+    public function setBadge(int $badge): PHPush\Message
     {
         $this->data['badge'] = $badge;
         $this->notification->setBadge($badge);
         return $this;
     }
 
-    public function setAdditional($data)
+    public function setAdditional(array $data): void
     {
         $this->additional = $data;
     }
 
     /**
      * @param string $collapseKey
-     * @return $this
+     * @return Message
      */
-    public function setCollapseKey($collapseKey)
+    public function setCollapseKey(string $collapseKey): Message
     {
         $this->collapseKey = $collapseKey;
         return $this;
@@ -72,19 +71,19 @@ class Message implements PHPush\Message
 
     /**
      * @param int $delayWithIdle
-     * @return $this
+     * @return Message
      */
-    public function setDelayWithIdle($delayWithIdle)
+    public function setDelayWithIdle(int $delayWithIdle): Message
     {
         $this->delayWithIdle = $delayWithIdle;
         return $this;
     }
 
     /**
-     * @param boolean $dryRun
-     * @return $this
+     * @param bool $dryRun
+     * @return Message
      */
-    public function setDryRun($dryRun)
+    public function setDryRun(bool $dryRun): Message
     {
         $this->dryRun = $dryRun;
         return $this;
@@ -92,9 +91,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $icon
-     * @return $this
+     * @return Message
      */
-    public function setIcon($icon)
+    public function setIcon(string $icon): Message
     {
         $this->notification->setIcon($icon);
         return $this;
@@ -102,9 +101,9 @@ class Message implements PHPush\Message
 
     /**
      * @param array $bodyLocArgs
-     * @return $this
+     * @return Message
      */
-    public function setBodyLocArgs($bodyLocArgs)
+    public function setBodyLocArgs(array $bodyLocArgs): Message
     {
         $this->notification->setBodyLocArgs($bodyLocArgs);
         return $this;
@@ -112,9 +111,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $bodyLocKey
-     * @return $this
+     * @return Message
      */
-    public function setBodyLocKey($bodyLocKey)
+    public function setBodyLocKey(string $bodyLocKey): Message
     {
         $this->notification->setBodyLocKey($bodyLocKey);
         return $this;
@@ -122,9 +121,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $clickAction
-     * @return $this
+     * @return Message
      */
-    public function setClickAction($clickAction)
+    public function setClickAction(string $clickAction): Message
     {
         $this->notification->setClickAction($clickAction);
         return $this;
@@ -132,9 +131,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $color
-     * @return $this
+     * @return Message
      */
-    public function setColor($color)
+    public function setColor(string $color): Message
     {
         $this->notification->setColor($color);
         return $this;
@@ -142,9 +141,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $sound
-     * @return $this
+     * @return Message
      */
-    public function setSound($sound)
+    public function setSound(string $sound): Message
     {
         $this->notification->setSound($sound);
         return $this;
@@ -152,9 +151,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $tag
-     * @return $this
+     * @return Message
      */
-    public function setTag($tag)
+    public function setTag(string $tag): Message
     {
         $this->notification->setTag($tag);
         return $this;
@@ -162,9 +161,9 @@ class Message implements PHPush\Message
 
     /**
      * @param array $titleLocArgs
-     * @return $this
+     * @return Message
      */
-    public function setTitleLocArgs($titleLocArgs)
+    public function setTitleLocArgs(array $titleLocArgs): Message
     {
         $this->notification->setTitleLocArgs($titleLocArgs);
         return $this;
@@ -172,9 +171,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $titleLocKey
-     * @return $this
+     * @return Message
      */
-    public function setTitleLocKey($titleLocKey)
+    public function setTitleLocKey(string $titleLocKey): Message
     {
         $this->notification->setTitleLocKey($titleLocKey);
         return $this;
@@ -183,7 +182,7 @@ class Message implements PHPush\Message
     /**
      * @return string
      */
-    public function getPriority()
+    public function getPriority(): string
     {
         return $this->priority;
     }
@@ -191,12 +190,12 @@ class Message implements PHPush\Message
     /**
      * @param string $priority
      */
-    public function setPriority($priority)
+    public function setPriority(string $priority): void
     {
         $this->priority = $priority;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $array = [
             'notification' => $this->notification->toArray(),

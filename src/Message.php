@@ -10,28 +10,27 @@ namespace abraovic\PHPush;
 interface Message
 {
     /**
-     * Gets message
+     * @return Message
      */
-    public function getMessage();
+    public function getMessage(): Message;
 
     /**
      * Set notification title
      * @param string $body
-     * @return $this
+     * @return Message
      */
-    public function setBody($body);
+    public function setBody(string $body): Message;
 
     /**
      * Set notification title
      * @param int $badge
-     * @return $this
+     * @return Message
      */
-    public function setBadge($badge);
+    public function setBadge(int $badge): Message;
 
     /**
      * Set notification title
      * @param array $data
-     * @return $this
      */
-    public function setAdditional($data);
+    public function setAdditional(array $data): void;
 } 

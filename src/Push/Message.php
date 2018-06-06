@@ -3,7 +3,6 @@ namespace abraovic\PHPush\Push;
 
 use abraovic\PHPush\Exception\PHPushException;
 use abraovic\PHPush;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  *     Copyright 2016
@@ -20,6 +19,7 @@ class Message implements PHPush\Message
     const ANDROID = 'Android';
 
     private $message;
+    private $type;
 
     /**
      * @param $type         ->  defines type of service identified by constants
@@ -47,7 +47,11 @@ class Message implements PHPush\Message
         }
     }
 
-    public function getMessage()
+    /**
+     * @return PHPush\Message
+     * @throws PHPushException
+     */
+    public function getMessage(): PHPush\Message
     {
         switch ($this->type) {
             case self::IOS:
@@ -69,17 +73,28 @@ class Message implements PHPush\Message
         return $msg;
     }
 
-    public function setBody($body)
+    /**
+     * @param $body
+     * @return PHPush\Message
+     */
+    public function setBody(string $body): PHPush\Message
     {
-        $this->message->setBody($body);
+        return $this->message->setBody($body);
     }
 
-    public function setBadge($badge)
+    /**
+     * @param int $badge
+     * @return PHPush\Message
+     */
+    public function setBadge(int $badge): PHPush\Message
     {
-        $this->message->setBadge($badge);
+        return $this->message->setBadge($badge);
     }
 
-    public function setAdditional($data)
+    /**
+     * @param $data
+     */
+    public function setAdditional(array $data): void
     {
         $this->message->setAdditional($data);
     }

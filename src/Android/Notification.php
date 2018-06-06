@@ -29,16 +29,16 @@ class Notification
     /**
      * @param string $title
      */
-    function __construct($title)
+    function __construct(string $title)
     {
         $this->title = $title;
     }
 
     /**
      * @param string $body
-     * @return $this
+     * @return Notification
      */
-    public function setBody($body)
+    public function setBody(string $body): Notification
     {
         $this->body = $body;
         return $this;
@@ -46,9 +46,9 @@ class Notification
 
     /**
      * @param string $icon
-     * @return $this
+     * @return Notification
      */
-    public function setIcon($icon)
+    public function setIcon(string $icon): Notification
     {
         $this->icon = $icon;
         return $this;
@@ -56,9 +56,9 @@ class Notification
 
     /**
      * @param int $badge
-     * @return $this
+     * @return Notification
      */
-    public function setBadge($badge)
+    public function setBadge(int $badge): Notification
     {
         $this->badge = $badge;
         return $this;
@@ -66,9 +66,9 @@ class Notification
 
     /**
      * @param array $bodyLocArgs
-     * @return $this
+     * @return Notification
      */
-    public function setBodyLocArgs($bodyLocArgs)
+    public function setBodyLocArgs(array $bodyLocArgs): Notification
     {
         $this->bodyLocArgs = $bodyLocArgs;
         return $this;
@@ -76,9 +76,9 @@ class Notification
 
     /**
      * @param string $bodyLocKey
-     * @return $this
+     * @return Notification
      */
-    public function setBodyLocKey($bodyLocKey)
+    public function setBodyLocKey(string $bodyLocKey): Notification
     {
         $this->bodyLocKey = $bodyLocKey;
         return $this;
@@ -86,9 +86,9 @@ class Notification
 
     /**
      * @param string $clickAction
-     * @return $this
+     * @return Notification
      */
-    public function setClickAction($clickAction)
+    public function setClickAction(string $clickAction): Notification
     {
         $this->clickAction = $clickAction;
         return $this;
@@ -96,9 +96,9 @@ class Notification
 
     /**
      * @param string $color
-     * @return $this
+     * @return Notification
      */
-    public function setColor($color)
+    public function setColor(string $color): Notification
     {
         $this->color = $color;
         return $this;
@@ -106,9 +106,9 @@ class Notification
 
     /**
      * @param string $sound
-     * @return $this
+     * @return Notification
      */
-    public function setSound($sound)
+    public function setSound(string $sound): Notification
     {
         $this->sound = $sound;
         return $this;
@@ -116,9 +116,9 @@ class Notification
 
     /**
      * @param string $tag
-     * @return $this
+     * @return Notification
      */
-    public function setTag($tag)
+    public function setTag(string $tag): Notification
     {
         $this->tag = $tag;
         return $this;
@@ -126,9 +126,9 @@ class Notification
 
     /**
      * @param array $titleLocArgs
-     * @return $this
+     * @return Notification
      */
-    public function setTitleLocArgs($titleLocArgs)
+    public function setTitleLocArgs(array $titleLocArgs): Notification
     {
         $this->titleLocArgs = $titleLocArgs;
         return $this;
@@ -136,15 +136,15 @@ class Notification
 
     /**
      * @param string $titleLocKey
-     * @return $this
+     * @return Notification
      */
-    public function setTitleLocKey($titleLocKey)
+    public function setTitleLocKey(string $titleLocKey): Notification
     {
         $this->titleLocKey = $titleLocKey;
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $array = ['title' => $this->title];
 

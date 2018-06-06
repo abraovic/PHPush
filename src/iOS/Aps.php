@@ -28,9 +28,9 @@ class Aps
 
     /**
      * @param int $badge
-     * @return $this
+     * @return Aps
      */
-    public function setBadge($badge)
+    public function setBadge(int $badge): Aps
     {
         $this->badge = $badge;
         return $this;
@@ -38,9 +38,9 @@ class Aps
 
     /**
      * @param string $category
-     * @return $this
+     * @return Aps
      */
-    public function setCategory($category)
+    public function setCategory(string $category): Aps
     {
         $this->category = $category;
         return $this;
@@ -48,9 +48,9 @@ class Aps
 
     /**
      * @param string $contentAvailable
-     * @return $this
+     * @return Aps
      */
-    public function setContentAvailable($contentAvailable)
+    public function setContentAvailable(string $contentAvailable): Aps
     {
         $this->contentAvailable = $contentAvailable;
         return $this;
@@ -58,18 +58,15 @@ class Aps
 
     /**
      * @param string $sound
-     * @return $this
+     * @return Aps
      */
-    public function setSound($sound)
+    public function setSound(string $sound): Aps
     {
         $this->sound = $sound;
         return $this;
     }
 
-    /**
-     * @return array $array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $array = ['alert' => $this->alert->toArray()];
 

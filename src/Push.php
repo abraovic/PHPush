@@ -13,15 +13,15 @@ interface Push
 {
     /**
      *     Send message to required provider
-     *     @param Message $message -> object of a type message
-     *     @return true on success
+     *     @param bool
+     *     @return Message
      */
-    public function sendMessage(Message $message);
+    public function sendMessage(Message $message): bool;
 
     /**
      *     Setup a lifetime of a notification
      *     @param $ttl -> integer value in seconds
-     *     @return $this
+     *     @return Push
      *
      *     NOTICE:
      *          This property is differently managed by APNS and FCM. This lib
@@ -29,14 +29,14 @@ interface Push
      *          FCM. Generally this property is part of message in FCM but a part
      *          of header (or metadata) in APNS.
      */
-    public function setNotificationTTL($ttl);
+    public function setNotificationTTL(int $ttl): Push;
 
     /**
      * Gets current active service
-     * @return $this
+     * @return Push
      * @throws PHPushException
      */
-    public function getService();
+    public function getService(): Push;
 
     /**
      *     Checks if payload is in a proper size
@@ -44,5 +44,5 @@ interface Push
      *     @param Message $message
      *     @return bool
      */
-    public function checkPayload(Message $message);
+    public function checkPayload(Message $message): bool ;
 } 

@@ -27,16 +27,21 @@ class FCM  implements PHPush\Push
      *     @param $settings
      */
     function __construct(
-        $deviceToken,
-        $googleApiKey,
-        $settings
+        string $deviceToken,
+        string $googleApiKey,
+        array $settings
     ) {
         $this->deviceToken = $deviceToken;
         $this->googleApiKey = $googleApiKey;
         $this->settings = $settings;
     }
 
-    public function sendMessage(PHPush\Message $message)
+    /**
+     * @param PHPush\Message $message
+     * @return bool
+     * @throws PHPushException
+     */
+    public function sendMessage(PHPush\Message $message): bool
     {
         $headers = array(
             'Authorization: key=' . $this->googleApiKey,
@@ -68,12 +73,12 @@ class FCM  implements PHPush\Push
         return $this->execute($parameters, $headers);
     }
 
-    public function getService()
+    public function getService(): PHPush\Push
     {
         return $this;
     }
 
-    public function setNotificationTTL($ttl)
+    public function setNotificationTTL(int $ttl): PHPush\Push
     {
         $this->timeToLive = $ttl;
         return $this;
@@ -82,29 +87,29 @@ class FCM  implements PHPush\Push
     /**
      * Setup a restricted package name
      * @param $restrictedPackageName -> string value
-     * @return $this
+     * @return FCM
      * @throws PHPushException
      */
-    public function setRestrictedPackageName($restrictedPackageName)
+    public function setRestrictedPackageName($restrictedPackageName): FCM
     {
         $this->restrictedPackageName = $restrictedPackageName;
         return $this;
     }
 
-    public function checkPayload(PHPush\Message $message)
+    public function checkPayload(PHPush\Message $message): bool
     {
         // FCM does not have any limit at the time so it will return true
         return true;
     }
 
     /**
-     *     @param $parameters -> array of data that will be sent to
-     *                           FCM server
-     *     @param $headers
+     *     @param array $parameters ->  array of data that will be sent to
+     *                                  FCM server
+     *     @param array $headers
      *     @throws PHPushException
-     *     @return true on success
+     *     @return bool
      */
-    private function execute($parameters, $headers)
+    private function execute(array $parameters, array $headers): bool
     {
         $ch = curl_init();
         if(!$ch){
@@ -141,11 +146,10 @@ class FCM  implements PHPush\Push
 
     /**
      * Parse error response from FCM
-     * @param $result
-     * @return bool
+     * @param string $result
      * @throws PHPushException
      */
-    private function checkGoogleErrorResponse($result)
+    private function checkGoogleErrorResponse(string $result): void
     {
         $jsonArray = json_decode($result);
         if (!$jsonArray) {

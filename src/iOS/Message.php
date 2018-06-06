@@ -2,7 +2,6 @@
 namespace abraovic\PHPush\iOS;
 
 use abraovic\PHPush;
-use abraovic\PHPush\Exception\PHPushException;
 
 /**
  *     Copyright 2016
@@ -24,40 +23,39 @@ class Message implements PHPush\Message
     /**
      * @param string $title
      */
-    function __construct($title)
+    function __construct(string $title)
     {
         $this->alert = new Alert($title);
         $this->aps = new Aps($this->alert);
     }
 
-    public function getMessage()
+    public function getMessage(): PHPush\Message
     {
         return $this;
     }
 
-    public function setBody($title)
+    public function setBody(string $title): PHPush\Message
     {
         $this->alert->setTitle($title);
         return $this;
     }
 
-    public function setBadge($badge)
+    public function setBadge(int $badge): PHPush\Message
     {
         $this->aps->setBadge($badge);
         return $this;
     }
 
-    public function setAdditional($data)
+    public function setAdditional(array $data): void
     {
         $this->additional = $data;
-        return $this;
     }
 
     /**
      * @param string $sound
-     * @return $this
+     * @return Message
      */
-    public function setSound($sound)
+    public function setSound(string $sound): Message
     {
         $this->aps->setSound($sound);
         return $this;
@@ -65,9 +63,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $contentAvailable
-     * @return $this
+     * @return Message
      */
-    public function setContentAvailable($contentAvailable)
+    public function setContentAvailable(string $contentAvailable): Message
     {
         $this->aps->setContentAvailable($contentAvailable);
         return $this;
@@ -75,9 +73,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $category
-     * @return $this
+     * @return Message
      */
-    public function setCategory($category)
+    public function setCategory(string $category): Message
     {
         $this->aps->setCategory($category);
         return $this;
@@ -85,9 +83,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $launchImage
-     * @return $this
+     * @return Message
      */
-    public function setLaunchImage($launchImage)
+    public function setLaunchImage(string $launchImage): Message
     {
         $this->alert->setLaunchImage($launchImage);
         return $this;
@@ -95,9 +93,9 @@ class Message implements PHPush\Message
 
     /**
      * @param array $locArgs
-     * @return $this
+     * @return Message
      */
-    public function setLocArgs($locArgs)
+    public function setLocArgs(array $locArgs): Message
     {
         $this->alert->setLocArgs($locArgs);
         return $this;
@@ -105,9 +103,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $locKey
-     * @return $this
+     * @return Message
      */
-    public function setLocKey($locKey)
+    public function setLocKey(string $locKey): Message
     {
         $this->alert->setLocKey($locKey);
         return $this;
@@ -115,9 +113,9 @@ class Message implements PHPush\Message
 
     /**
      * @param string $actionLocKey
-     * @return $this
+     * @return Message
      */
-    public function setActionLocKey($actionLocKey)
+    public function setActionLocKey(string $actionLocKey): Message
     {
         $this->alert->setActionLocKey($actionLocKey);
         return $this;
@@ -125,9 +123,9 @@ class Message implements PHPush\Message
 
     /**
      * @param array $titleLocArgs
-     * @return $this
+     * @return Message
      */
-    public function setTitleLocArgs($titleLocArgs)
+    public function setTitleLocArgs(array $titleLocArgs): Message
     {
         $this->alert->setTitleLocArgs($titleLocArgs);
         return $this;
@@ -135,15 +133,15 @@ class Message implements PHPush\Message
 
     /**
      * @param string $titleLocKey
-     * @return $this
+     * @return Message
      */
-    public function setTitleLocKey($titleLocKey)
+    public function setTitleLocKey(string $titleLocKey): Message
     {
         $this->setTitleLocKey($titleLocKey);
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $rsp = ["aps" => $this->aps->toArray()];
         if ($this->additional) {

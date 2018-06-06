@@ -36,6 +36,8 @@ class Push implements PHPush\Push
      *                            for Android
      *                                  array('device_token' => '...', 'google_api_key' => '...')
      * @throws PHPushException
+     * @throws PHPush\Exception\ConfigMissingException
+     * @throws PHPush\Exception\InvalidCredentialsException
      */
     function __construct($type, $credentials)
     {
@@ -71,7 +73,11 @@ class Push implements PHPush\Push
         }
     }
 
-    public function getService()
+    /**
+     * @return PHPush\Push
+     * @throws PHPushException
+     */
+    public function getService(): PHPush\Push
     {
         switch ($this->type) {
             case self::IOS:
@@ -93,19 +99,32 @@ class Push implements PHPush\Push
         return $svc;
     }
 
-    public function sendMessage(PHPush\Message $message)
+    /**
+     * @param PHPush\Message $message
+     * @return bool
+     * @throws PHPushException
+     */
+    public function sendMessage(PHPush\Message $message): bool
     {
         return $this->service->sendMessage($message);
     }
 
-    public function setNotificationTTL($ttl)
+    /**
+     * @param int $ttl
+     * @return PHPush\Push
+     */
+    public function setNotificationTTL(int $ttl): PHPush\Push
     {
         return $this->service->setNotificationTTL($ttl);
     }
 
-    public function checkPayload(PHPush\Message $message)
+    /**
+     * @param PHPush\Message $message
+     * @return bool
+     */
+    public function checkPayload(PHPush\Message $message): bool
     {
-        $this->service->checkPayload($message);
+        return $this->service->checkPayload($message);
     }
 
     /**
@@ -115,7 +134,7 @@ class Push implements PHPush\Push
      * @return array
      * @throws PHPush\Exception\ConfigMissingException
      */
-    private function loadConfiguration($path = "system")
+    private function loadConfiguration($path = "system"): array
     {
         if ($path == "system") {
             $path = realpath(dirname(__FILE__)) . "/../../config.yml";
@@ -139,7 +158,7 @@ class Push implements PHPush\Push
      * @throws PHPush\Exception\InvalidCredentialsException
      * @throws PHPushException
      */
-    private function validateCredentials($type, $credentials)
+    private function validateCredentials($type, $credentials): bool
     {
         if (is_array($credentials['device_token'])) {
             if (count($credentials['device_token']) > 1000) {

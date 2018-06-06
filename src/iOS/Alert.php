@@ -22,16 +22,16 @@ class Alert
     /**
      * @param string $body
      */
-    function __construct($body)
+    function __construct(string $body)
     {
         $this->body = $body;
     }
 
     /**
      * @param string $title
-     * @return $this
+     * @return Alert
      */
-    public function setTitle($title)
+    public function setTitle(string $title): Alert
     {
         $this->title = $title;
         return $this;
@@ -39,9 +39,9 @@ class Alert
 
     /**
      * @param string $launchImage
-     * @return $this
+     * @return Alert
      */
-    public function setLaunchImage($launchImage)
+    public function setLaunchImage(string $launchImage): Alert
     {
         $this->launchImage = $launchImage;
         return $this;
@@ -49,9 +49,9 @@ class Alert
 
     /**
      * @param array $locArgs
-     * @return $this
+     * @return Alert
      */
-    public function setLocArgs($locArgs)
+    public function setLocArgs(string $locArgs): Alert
     {
         $this->locArgs = $locArgs;
         return $this;
@@ -59,9 +59,9 @@ class Alert
 
     /**
      * @param string $locKey
-     * @return $this
+     * @return Alert
      */
-    public function setLocKey($locKey)
+    public function setLocKey(string $locKey): Alert
     {
         $this->locKey = $locKey;
         return $this;
@@ -69,9 +69,9 @@ class Alert
 
     /**
      * @param string $actionLocKey
-     * @return $this
+     * @return Alert
      */
-    public function setActionLocKey($actionLocKey)
+    public function setActionLocKey(string $actionLocKey): Alert
     {
         $this->actionLocKey = $actionLocKey;
         return $this;
@@ -79,9 +79,9 @@ class Alert
 
     /**
      * @param array $titleLocArgs
-     * @return $this
+     * @return Alert
      */
-    public function setTitleLocArgs($titleLocArgs)
+    public function setTitleLocArgs(string $titleLocArgs): Alert
     {
         $this->titleLocArgs = $titleLocArgs;
         return $this;
@@ -89,15 +89,15 @@ class Alert
 
     /**
      * @param string $titleLocKey
-     * @return $this
+     * @return Alert
      */
-    public function setTitleLocKey($titleLocKey)
+    public function setTitleLocKey(string $titleLocKey): Alert
     {
         $this->titleLocKey = $titleLocKey;
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         $array = ['body' => $this->body];
 

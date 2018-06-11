@@ -27,7 +27,7 @@ class FCM  implements PHPush\Push
      *     @param $settings
      */
     function __construct(
-        string $deviceToken,
+        $deviceToken,
         string $googleApiKey,
         array $settings
     ) {

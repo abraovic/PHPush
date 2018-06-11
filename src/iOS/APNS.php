@@ -37,7 +37,7 @@ class APNS implements PHPush\Push
      *     @param $development -> if true development url will be used
      */
     function __construct(
-        string $deviceToken,
+        $deviceToken,
         string $certificatePath,
         string $certificateParaphrase,
         array $settings,
@@ -77,10 +77,10 @@ class APNS implements PHPush\Push
 
     /**
      * Setup a identifier of a notification
-     * @param $identifier -> string value
+     * @param string $identifier
      * @return APNS
      */
-    public function setIdentifier($identifier): APNS
+    public function setIdentifier(string $identifier): APNS
     {
         $this->identifier = $identifier;
         return $this;
@@ -88,10 +88,10 @@ class APNS implements PHPush\Push
 
     /**
      * Setup a priority of a notification
-     * @param $priority
+     * @param int $priority
      * @return APNS
      */
-    public function setPriority($priority): APNS
+    public function setPriority(int $priority): APNS
     {
         $this->priority = $priority;
         return $this;

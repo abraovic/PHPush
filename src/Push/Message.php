@@ -16,6 +16,7 @@ class Message implements PHPush\Message
     // define constants to determine which kind of a push notification
     // should be sent
     const IOS = 'iOS';
+    const IOS_JWT = 'iOS_jwt';
     const ANDROID = 'Android';
 
     private $message;
@@ -33,6 +34,7 @@ class Message implements PHPush\Message
 
         switch ($type) {
             case self::IOS:
+            case self::IOS_JWT:
                 $this->message = new PHPush\iOS\Message($title);
                 break;
             case self::ANDROID:
@@ -55,6 +57,7 @@ class Message implements PHPush\Message
     {
         switch ($this->type) {
             case self::IOS:
+            case self::IOS_JWT:
                 /** @var PHPush\iOS\Message $msg */
                 $msg = $this->message;
                 break;

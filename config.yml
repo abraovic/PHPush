@@ -8,6 +8,15 @@ ios:
         - certificate_path
         - certificate_phrase
         - dev
+ios_jwt:
+    socket_url:
+        production: api.push.apple.com
+        development: api.development.push.apple.com
+    credentials:
+        - device_token
+        - app_bundle_id
+        - jwt
+        - dev
 android:
     socket_url:
         production: https://fcm.googleapis.com/fcm/send

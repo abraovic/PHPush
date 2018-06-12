@@ -17,6 +17,7 @@ class Push implements PHPush\Push
     // define constants to determine which kind of a push notification
     // should be sent
     const IOS = 'iOS';
+    const IOS_JWT = 'iOS_jwt';
     const ANDROID = 'Android';
 
     private $service;
@@ -56,6 +57,16 @@ class Push implements PHPush\Push
                     $credentials['dev']
                 );
                 break;
+            case self::IOS_JWT:
+                /** @var PHPush\iOS\APNS_JWT $service */
+                $this->service = new PHPush\iOS\APNS_JWT(
+                    $credentials['device_token'],
+                    $credentials['app_bundle_id'],
+                    $credentials['jwt'],
+                    $this->config,
+                    $credentials['dev']
+                );
+                break;
             case self::ANDROID:
                 /** @var PHPush\Android\FCM $service */
                 $this->service = new PHPush\Android\FCM(
@@ -82,6 +93,10 @@ class Push implements PHPush\Push
         switch ($this->type) {
             case self::IOS:
                 /** @var PHPush\iOS\APNS $svc */
+                $svc = $this->service;
+                break;
+            case self::IOS_JWT:
+                /** @var PHPush\iOS\APNS_JWT $svc */
                 $svc = $this->service;
                 break;
             case self::ANDROID:
@@ -174,6 +189,17 @@ class Push implements PHPush\Push
                 $countOk = 0;
                 foreach ($credentials as $key => $item) {
                     if (in_array($key, $this->config['ios']['credentials'])) {
+                        $countOk++;
+                    }
+                }
+                if ($countOk == 4) {
+                    return true;
+                }
+                break;
+            case self::IOS_JWT:
+                $countOk = 0;
+                foreach ($credentials as $key => $item) {
+                    if (in_array($key, $this->config['ios_jwt']['credentials'])) {
                         $countOk++;
                     }
                 }

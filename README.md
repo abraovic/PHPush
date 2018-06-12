@@ -47,6 +47,19 @@ try {
 }
 ```
 
+## Docker
+
+This lib includes docker environment with all extensions installed so you can try it. In order to use it run:
+```bash
+docker build -t abraovic/phpush -f .docker/Dockerfile .
+docker-compose up -d
+
+## after docker in up and running open the container go to /opt and run composer install/update
+docker exec -it phpush-test /bin/bash
+cd /opt
+composer install
+```
+
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING][] for details.

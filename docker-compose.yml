@@ -1,0 +1,8 @@
+version: '3'
+services:
+    application:
+        image: abraovic/phpush
+        container_name: phpush-test
+        volumes:
+            - './:/opt'
+        dns: 8.8.8.8

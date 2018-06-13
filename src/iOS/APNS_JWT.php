@@ -15,8 +15,9 @@ use abraovic\PHPush\Exception\PHPushException;
 
 class APNS_JWT implements PHPush\Push
 {
-    private $ch;
+    const IDENTIFIER_REGEX = '/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/';
 
+    private $ch;
     private $deviceToken;
     private $settings;
     private $url;
@@ -86,9 +87,16 @@ class APNS_JWT implements PHPush\Push
      * Setup a identifier of a notification
      * @param string $identifier
      * @return APNS_JWT
+     * @throws PHPushException
      */
     public function setIdentifier(string $identifier): APNS_JWT
     {
+        if (!preg_match(self::IDENTIFIER_REGEX, $identifier)) {
+            throw new PHPushException(
+                "Invalid format. The canonical form is 32 lowercase hexadecimal digits, displayed in five groups separated by hyphens in the form 8-4-4-4-12.",
+                500
+            );
+        }
         $this->identifier = $identifier;
         return $this;
     }
@@ -155,8 +163,8 @@ class APNS_JWT implements PHPush\Push
             CURLOPT_HTTPHEADER => $this->buildHeader(),
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0,
             CURLOPT_PORT => self::$port,
-            CURLOPT_POST => TRUE,
-            CURLOPT_RETURNTRANSFER => TRUE,
+            CURLOPT_POST => true,
+            CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HEADER => 1
         ]);
@@ -230,12 +238,25 @@ class APNS_JWT implements PHPush\Push
     /**
      * Parse error response from APNS
      * @param string $result
+     * @return string
      * @throws PHPushException
      */
-    private function checkAppleErrorResponse(string $result): void
+    private function checkAppleErrorResponse(string $result): string
     {
-        var_dump($result);
-        // TODO: implement response check
+        list($status,$apnsId,,$json) = explode("\n", $result);
+        preg_match(self::IDENTIFIER_REGEX, $apnsId, $a);
+        $apnsId = isset($a[0]) ? $a[0] : "";
+
+        if ($json) {
+            $status = explode(" ", $status)[1];
+            $error = json_decode($json, true);
+            throw new PHPushException(
+                "[iOS]: APNS error response: [" . $error['reason'] . "] with identifier: [" . $apnsId . "] and status: [" . $status . "]",
+                500
+            );
+        }
+
+        return $apnsId;
     }
 
     /**

@@ -51,7 +51,7 @@ class Alert
      * @param array $locArgs
      * @return Alert
      */
-    public function setLocArgs(string $locArgs): Alert
+    public function setLocArgs(array $locArgs): Alert
     {
         $this->locArgs = $locArgs;
         return $this;
@@ -81,7 +81,7 @@ class Alert
      * @param array $titleLocArgs
      * @return Alert
      */
-    public function setTitleLocArgs(string $titleLocArgs): Alert
+    public function setTitleLocArgs(array $titleLocArgs): Alert
     {
         $this->titleLocArgs = $titleLocArgs;
         return $this;

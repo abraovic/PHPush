@@ -33,4 +33,10 @@ interface Message
      * @param array $data
      */
     public function setAdditional(array $data): void;
+
+    /**
+     * To Array
+     * @@return array
+     */
+    public function toArray(): array;
 } 

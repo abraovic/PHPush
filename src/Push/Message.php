@@ -42,7 +42,7 @@ class Message implements PHPush\Message
                 break;
             default:
                 throw new PHPushException(
-                    "Unxeisting service called. Available services are [Push::IOS] and [Push::ANDROID]",
+                    "Non-existing service called. Available services are [Push::IOS] and [Push::ANDROID]",
                     500
                 );
                 break;
@@ -67,7 +67,7 @@ class Message implements PHPush\Message
                 break;
             default:
                 throw new PHPushException(
-                    "Unxeisting service called. Available services are [Push::IOS] and [Push::ANDROID]",
+                    "Non-existing service called. Available services are [Push::IOS] and [Push::ANDROID]",
                     500
                 );
                 break;
@@ -100,5 +100,11 @@ class Message implements PHPush\Message
     public function setAdditional(array $data): void
     {
         $this->message->setAdditional($data);
+    }
+
+    public function toArray(): array
+    {
+        // it will be implemented by successors
+        return [];
     }
 } 

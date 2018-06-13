@@ -33,10 +33,11 @@ class APNS_JWT implements PHPush\Push
     private static $port = 443;
 
     /**
-     *     @param $deviceToken
-     *     @param string $appBundleId
-     *     @param $settings
-     *     @param bool $development
+     * @param $deviceToken
+     * @param string $appBundleId
+     * @param JWT $jwt
+     * @param $settings
+     * @param bool $development
      */
     function __construct(
         $deviceToken,
@@ -181,9 +182,9 @@ class APNS_JWT implements PHPush\Push
     }
 
     /**
-     * @param array $payload
-     * @throws PHPushException
+     * @param array $message
      * @return bool
+     * @throws PHPushException
      */
     private function execute(array $message): bool
     {

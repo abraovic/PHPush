@@ -88,7 +88,6 @@ class FCM  implements PHPush\Push
      * Setup a restricted package name
      * @param $restrictedPackageName -> string value
      * @return FCM
-     * @throws PHPushException
      */
     public function setRestrictedPackageName($restrictedPackageName): FCM
     {

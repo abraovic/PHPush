@@ -13,8 +13,8 @@ interface Push
 {
     /**
      *     Send message to required provider
-     *     @param bool
-     *     @return Message
+     *     @param Message $message
+     *     @return bool
      */
     public function sendMessage(Message $message): bool;
 

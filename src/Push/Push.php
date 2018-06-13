@@ -77,7 +77,7 @@ class Push implements PHPush\Push
                 break;
             default:
                 throw new PHPushException(
-                    "Unxeisting service called. Available services are [Push::IOS] and [Push::ANDROID]",
+                    "Non-existing service called. Available services are [Push::IOS] and [Push::ANDROID]",
                     500
                 );
                 break;
@@ -105,7 +105,7 @@ class Push implements PHPush\Push
                 break;
             default:
                 throw new PHPushException(
-                    "Unxeisting service called. Available services are [Push::IOS] and [Push::ANDROID]",
+                    "Non-existing service called. Available services are [Push::IOS] and [Push::ANDROID]",
                     500
                 );
                 break;
@@ -220,7 +220,7 @@ class Push implements PHPush\Push
                 break;
             default:
                 throw new PHPushException(
-                    "Unxeisting service called. Available services are [Push::IOS] and [Push::ANDROID]",
+                    "Non-existing service called. Available services are [Push::IOS] and [Push::ANDROID]",
                     500
                 );
                 break;
